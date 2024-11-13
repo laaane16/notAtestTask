@@ -1,18 +1,43 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import UniversalInput from "./UniversalInput";
 import UniversalInputFC from "./UniversalInputFC";
 
 const App = () => {
-  const [firstValue, setFirstValue] = useState("");
-  const [secondValue, setSecondValue] = useState("");
-  const [thirdValue, setThirdValue] = useState("");
-  const [fourValue, setFourValue] = useState("");
-  const [fiveValue, setFiveValue] = useState("");
+  const [firstValue, setFirstValue] = useState(
+    localStorage.getItem("firstInput") || ""
+  );
+  const [secondValue, setSecondValue] = useState(
+    localStorage.getItem("secondInput") || ""
+  );
+  const [thirdValue, setThirdValue] = useState(
+    localStorage.getItem("thirdInput") || ""
+  );
+  const [fourValue, setFourValue] = useState(
+    localStorage.getItem("fourInput") || ""
+  );
+  const [fiveValue, setFiveValue] = useState(
+    localStorage.getItem("fiveInput") || ""
+  );
 
-  // useEffect(() => {
-  //   console.log(firstValue, secondValue, thirdValue)
-  // }, [firstValue, secondValue, thirdValue])
+  const states = [
+    { state: firstValue, title: "firstInput", setState: setFirstValue },
+    { state: secondValue, title: "secondInput", setState: setSecondValue },
+    { state: thirdValue, title: "thirdInput", setState: setThirdValue },
+    { state: fourValue, title: "fourhInput", setState: setFourValue },
+    { state: fiveValue, title: "fiveInput", setState: setFiveValue },
+  ];
+
+  useEffect(() => {
+    const onChange = (e) => {
+      const state = states.find((state) => state.title === e.key);
+      state.setState(e.newValue)
+    };
+    window.addEventListener("storage", onChange);
+
+    return () => {
+      window.removeEventListener("storage", onChange);
+    };
+  }, []);
 
   return (
     <div className="main">
@@ -85,7 +110,10 @@ const App = () => {
           type="number"
           disabled={false}
           value={firstValue}
-          onChange={setFirstValue}
+          onChange={(value) => {
+            setFirstValue(value);
+            localStorage.setItem("firstInput", value);
+          }}
           placeholder="Number type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -93,7 +121,10 @@ const App = () => {
         <UniversalInputFC
           disabled={false}
           value={secondValue}
-          onChange={setSecondValue}
+          onChange={(value) => {
+            setSecondValue(value);
+            localStorage.setItem("secondInput", value);
+          }}
           placeholder="Text type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -102,7 +133,10 @@ const App = () => {
           multiline={true}
           disabled={false}
           value={thirdValue}
-          onChange={setThirdValue}
+          onChange={(value) => {
+            setThirdValue(value);
+            localStorage.setItem("thirdInput", value);
+          }}
           placeholder="Text multiline type"
           style={{ width: "100%" }}
           className="inputItem"
@@ -111,7 +145,10 @@ const App = () => {
         <UniversalInputFC
           disabled={false}
           value={fourValue}
-          onChange={setFourValue}
+          onChange={(value) => {
+            setFourValue(value);
+            localStorage.setItem("fourInput", value);
+          }}
           mask={"111-111"}
           placeholder="With mask"
           style={{
@@ -122,11 +159,14 @@ const App = () => {
           }}
           className="inputItem"
         />
-        
+
         <UniversalInputFC
           disabled={false}
           value={fiveValue}
-          onChange={setFiveValue}
+          onChange={(value) => {
+            setFiveValue(value);
+            localStorage.setItem("fiveInput", value);
+          }}
           options={[
             { value: "first element", label: "first element" },
             { value: "second element", label: "second element" },
