@@ -12,15 +12,16 @@ import * as styles from "./styles.css";
 const { TextArea } = Input;
 const { Option, OptGroup } = Select;
 
+
 class CodeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      value: "",
     };
   }
 
-  onChange = e => {
+  onChange = (e) => {
     const value = e.target.value;
     this.setState({ value });
     this.props.onChange && this.props.onChange(value);
@@ -63,7 +64,7 @@ class TextInputWithActions extends Component {
     const actionsWidth = this.actionsNode.clientWidth;
     if (actionsWidth !== this.state.actionsWidth) {
       this.setState({
-        actionsWidth
+        actionsWidth,
       });
     }
   }
@@ -83,19 +84,19 @@ class TextInputWithActions extends Component {
     this.recalcActionsWidth();
   }
 
-  onChange = e => {
+  onChange = (e) => {
     const value = e.target.value;
     this.setState({ value });
     this.onChangeDebounce(value);
     this.setValue(value);
   };
 
-  setValue = value => {
+  setValue = (value) => {
     this.setState({ value });
     this.onChangeDebounce(value);
   };
 
-  onBlur = e => {
+  onBlur = (e) => {
     if (this.props.readOnly) {
       return;
     }
@@ -103,7 +104,7 @@ class TextInputWithActions extends Component {
     this.setBlur(value);
   };
 
-  onBlurSelect = e => {
+  onBlurSelect = (e) => {
     if (this.props.readOnly) {
       return;
     }
@@ -111,13 +112,13 @@ class TextInputWithActions extends Component {
     this.setBlur(this.state.value);
   };
 
-  onChangeNumber = value => {
+  onChangeNumber = (value) => {
     value = this.props.prepareNumber ? this.props.prepareNumber(value) : value;
     this.setState({ value });
     this.onChangeDebounce(value);
   };
 
-  onBlurNumber = e => {
+  onBlurNumber = (e) => {
     if (this.props.readOnly) {
       return;
     }
@@ -128,7 +129,7 @@ class TextInputWithActions extends Component {
     }
   };
 
-  setBlur = value => {
+  setBlur = (value) => {
     this.setState({ value });
     this.onChangeDebounceCancel();
     this.props.onChange && this.props.onChange(value);
@@ -140,7 +141,7 @@ class TextInputWithActions extends Component {
     this.state.oldValue = value;
   };
 
-  onChangeDebounce = value => {
+  onChangeDebounce = (value) => {
     this.onChangeDebounceCancel();
     this.changeTimer = setTimeout(() => {
       this.props.onChange && this.props.onChange(value);
@@ -151,7 +152,7 @@ class TextInputWithActions extends Component {
     clearTimeout(this.changeTimer);
   };
 
-  onKeyDown = e => {
+  onKeyDown = (e) => {
     this.props.onKeyDown && this.props.onKeyDown(e);
 
     if (!this.props.allowTabs) {
@@ -165,7 +166,7 @@ class TextInputWithActions extends Component {
     }
   };
 
-  onChangeMasked = e => {
+  onChangeMasked = (e) => {
     let { mask } = this.props;
     const value = e.target.value;
 
@@ -176,7 +177,7 @@ class TextInputWithActions extends Component {
     }
   };
 
-  getPlaceHolderMask = mask => {
+  getPlaceHolderMask = (mask) => {
     const charsEditableMask = _.keys(formatCharsInput).join("");
     let placeholder = "";
     let shielding = false;
@@ -204,7 +205,7 @@ class TextInputWithActions extends Component {
     return placeholder;
   };
 
-  renderSelectOption = o => {
+  renderSelectOption = (o) => {
     return (
       <Option value={o.value} label={o.label}>
         {o.label}
@@ -249,12 +250,12 @@ class TextInputWithActions extends Component {
       type === "number" ? "" : styles.textInputContainer;
 
     const containerCN = cn(wrapperClassName, textInputContainer, {
-      [styles.inputMask]: !multiline && !!mask
+      [styles.inputMask]: !multiline && !!mask,
     });
     let inputCN = cn(className, {
       [styles.inputReadOnly]: this.props.readOnly,
       [styles[theme]]: !!theme,
-      [styles.readOnly]: this.props.readOnly
+      [styles.readOnly]: this.props.readOnly,
     });
 
     let actionsCN;
@@ -293,8 +294,7 @@ class TextInputWithActions extends Component {
           />
         );
       }
-    } 
-    else if (mask) {
+    } else if (mask) {
       control = (
         <MaskedInput
           formatChars={formatCharsInput}
@@ -309,7 +309,7 @@ class TextInputWithActions extends Component {
           onBlur={this.onBlur}
           disabled={this.props.readOnly}
         >
-          {inputProps => <Input {...inputProps} ref={this.input} />}
+          {(inputProps) => <Input {...inputProps} ref={this.input} />}
         </MaskedInput>
       );
     } else if (script) {
@@ -328,11 +328,11 @@ class TextInputWithActions extends Component {
       );
     } else if (options) {
       inputStyle = _.assign(inputStyle, { width: "100%" });
-      const valueInOptions = _.some(options, o => {
+      const valueInOptions = _.some(options, (o) => {
         if (o.value === value) {
           return true;
         }
-        if (o.options && _.some(o.options, o => o.value === value)) {
+        if (o.options && _.some(o.options, (o) => o.value === value)) {
           return true;
         }
       });
@@ -358,11 +358,11 @@ class TextInputWithActions extends Component {
             (option.label || "").toLowerCase().includes(input.toLowerCase())
           }
         >
-          {options.map(o => {
+          {options.map((o) => {
             if (_.isArray(o.options)) {
               return (
                 <OptGroup key={o.value} label={o.label}>
-                  {o.options.map(o => {
+                  {o.options.map((o) => {
                     return this.renderSelectOption(o);
                   })}
                 </OptGroup>
@@ -383,7 +383,7 @@ class TextInputWithActions extends Component {
           rows={4}
           autoSize={{
             minRows: props.readOnly ? 1 : minRows,
-            maxRows: maxRows
+            maxRows: maxRows,
           }}
           className={cn(inputCN, styles.textArea)}
           onChange={this.onChange}
@@ -415,18 +415,17 @@ class TextInputWithActions extends Component {
     return (
       <div className={containerCN}>
         {control}
-        {(actions &&
-          actions.length && (
-            <ul
-              className={cn(actionsClassName, actionsCN)}
-              ref={node => (this.actionsNode = node)}
-              style={actionsStyle}
-            >
-              {actions.map((node, i) => (
-                <li key={i}>{node}</li>
-              ))}
-            </ul>
-          )) ||
+        {(actions && actions.length && (
+          <ul
+            className={cn(actionsClassName, actionsCN)}
+            ref={(node) => (this.actionsNode = node)}
+            style={actionsStyle}
+          >
+            {actions.map((node, i) => (
+              <li key={i}>{node}</li>
+            ))}
+          </ul>
+        )) ||
           null}
       </div>
     );
@@ -435,28 +434,22 @@ class TextInputWithActions extends Component {
 
 class UniversalInput extends Component {
   state = {
-    shouldProcess: false
+    shouldProcess: false,
   };
 
-  onChange = value => {
+  onChange = (value) => {
     this.props.onChange && this.props.onChange(value);
     this.props.eventable && this.setState({ shouldProcess: true });
   };
 
-  onEndEditing = value => {
+  onEndEditing = (value) => {
     this.props.onEndEditing && this.props.onEndEditing(value);
     this.setState({ shouldProcess: false });
   };
 
   render() {
-    const {
-      updateProcess,
-      eventable,
-      actions,
-      onEndEditing,
-      t,
-      ...props
-    } = this.props;
+    const { updateProcess, eventable, actions, onEndEditing, t, ...props } =
+      this.props;
     let { shouldProcess } = this.state;
     const inProcess = updateProcess && updateProcess.get("inProcess");
 
@@ -465,11 +458,10 @@ class UniversalInput extends Component {
       newActions.push(
         <span
           className={cn(styles.actionIcon, {
-            [styles.actionIconGray]: inProcess
+            [styles.actionIconGray]: inProcess,
           })}
           title={inProcess ? "" : "ready to send"}
-        >
-        </span>
+        ></span>
       );
     }
     return (
@@ -483,4 +475,4 @@ class UniversalInput extends Component {
   }
 }
 
-export default UniversalInput
+export default UniversalInput;
